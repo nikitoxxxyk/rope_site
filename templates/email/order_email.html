@@ -1,0 +1,20 @@
+<h2>Новый заказ #{{ order.id }}</h2>
+<p><strong>Клиент:</strong> {{ order.customer_name }}</p>
+<p><strong>Телефон:</strong> {{ order.phone }}</p>
+<p><strong>Email:</strong> {{ order.email }}</p>
+
+<h3>Товары:</h3>
+<table border="1" cellpadding="5">
+    <tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price }} руб.</td>
+        <td>{{ item.total_price }} руб.</td>
+    </tr>
+    {% endfor %}
+    <tr><td colspan="3"><strong>Итого:</strong></td><td>{{ total }} руб.</td></tr>
+</table>
+
+<p><strong>Комментарий:</strong> {{ order.comment|default:"—" }}</p>

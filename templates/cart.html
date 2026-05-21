@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Корзина{% endblock title %}
+
+{% block content %}
+<section class="page-section bg-light" id="portfolio">
+	<div class="container">
+    	<div class="row align-items-center mb-4">
+        	<div class="col">
+            	<h2 style="margin-top: 10px">🗑 Корзина</h2>
+				{% if cart_items %}
+            	<div>
+                	<a href="{% url 'catalog' %}" class="btn btn-primary">📚 Каталог</a>
+            	</div>
+			</div>	
+				{% for item in cart_items %}
+			<div class="row">
+				<div class="col-lg-4 col-sm-6 mb-4">
+					<div class="portfolio-item">
+						<div class="portfolio-caption">
+							<div class="portfolio-caption-heading">{{ item.product.name }}</div>
+							<img src="{{ item.product.image.url }}" width="50">
+							<div class="portfolio-caption-subheading text-muted">Цена: {{ item.product.price }}</div>
+							<div class="portfolio-caption-subheading text-muted">Количество: {{ item.quantity }}</div>
+							<div class="portfolio-caption-subheading text-muted">Итоговая стоимость: {{ item.total_price }} руб.</div>
+							<form method="post" action="{% url 'delete_from_cart' item.product.id %}">
+								{% csrf_token %}
+								<button class="btn-danger btn btn-primary">Удалить</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+				<div class="portfolio-caption-subheading text-muted"><strong>Цена всех товаров в корзине: {{ total_sum }} руб.</strong></div>
+
+				<!-- Форма оформления заказа -->
+				<form method='post' action="{% url "create_order" %}">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<div class="d-flex align-items-center justify-content-center">
+						<button class="btn btn-primary btn-xl text-uppercase">Отправить заявку</button>
+					</div>
+				</form>
+
+				<!-- Если товаров в корзине нет -->
+				{% else %} 
+				<h3>Товаров в корзине пока нет, но вы можете их добавить, перейдя в ➡️
+                	<a href="{% url 'catalog' %}" class="btn btn-primary btn-xl">📚 Каталог</a>
+            	</h3>	
+				{% endif %}
+			</div>
+			
+		</div>
+	</div>	
+</section>
+
+{% endblock content %}
+

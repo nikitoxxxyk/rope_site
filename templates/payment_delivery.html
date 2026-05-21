@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Оплата и доставка{% endblock title %}
+
+{% block content %}
+<section class="page-section" id="services">
+    <div class="container">
+        <div class="text-center" style="padding-bottom: 35px">
+            <h2 class="section-heading text-uppercase">💰 Оплата и доставка</h2>
+        </div>
+        <div class="d-flex flex-column flex-sm-row justify-content-center" style="gap: 17rem;">
+            <div class="col-md-4 text-center">
+                <h4 class="my-3">👤 Физ лица</h4>
+				<p class="text-muted">Сумма заказа: от 6000 руб.</p>
+                <p class="text-muted">Способы оплаты:
+– Переводом на наш расчётный счёт
+– На карту СберБанка, Тинькофф
+– Наличными при получении товара</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <h4 class="my-3">💼 Юр лица</h4>
+                <p class="text-muted">Сумма заказа: от 12 000 руб.</p>
+                <p class="text-muted">Способы оплаты:
+– По реквизитам, указанным в счёте или договоре. Для получения счёта или заключения договора, пожалуйста оставьте заявку на нашем сайте или обратитесь по нашим контактам.</p>
+            </div>
+        </div>
+		<div class="d-flex flex-column flex-sm-row justify-content-center" style="gap: 17rem;">
+			<div class="col-md-4 text-center">
+					<h4 class="my-3">📦 Доставка</h4>
+					<p class="text-muted">Мы осуществляем доставку по Москве и Московской области. Доставка по территории России осуществляется при помощи транспортных компаний (Деловые линии, СДЭК, ПЭК и др.)</p>
+					<p class="text-muted">Стоимость доставки:
+– В пределах МКАД заказы от 40 000: БЕСПЛАТНО.
+– В пределах Московской области заказы от 150 000: БЕСПЛАТНО.
+– Доставка до терминалов транспортных компаний: БЕСПЛАТНО.</p>
+			</div>
+			<div class="col-md-4 text-center">
+					<h4 class="my-3">🤝 Сотрудничество</h4>
+					<p class="text-muted">По всем вопросам сотрудничества пишите нам на почту с предложениями, либо оставьте свои контакты на главной странице сайта и мы свяжемся с вами</p>
+			</div>
+		</div>
+        <div class="d-flex flex-column flex-sm-row justify-content-center">
+            <div class="col-md-4 text-center">
+                <a href="{% url 'catalog' %}" class="btn btn-primary">📚 Каталог</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

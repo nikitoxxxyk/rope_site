@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Заказать звонок{% endblock title %}
+
+{% block content %}
+<section class="page-section" id="contact">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Заказать звонок</h2>
+            <h3 class="section-subheading text-muted">Оставьте здесь ваши контакты и мы свяжемся с вами в ближайшее время</h3>
+        </div>
+        <form id="contactForm" method="post" action="{% url "call_request" %}">
+            {% csrf_token %}
+			{{ form.as_p }}
+            <div class="row align-items-stretch mb-5">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input class="form-control" name="name" type="text" placeholder="Ваше имя *" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="email" type="email" placeholder="Ваш Email (необязательно)">
+                    </div>
+                    <div class="form-group mb-md-0">
+                        <input class="form-control" name="phone" type="tel" placeholder="Телефон *" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-textarea mb-md-0">
+                        <textarea class="form-control" name="message" placeholder="Ваш вопрос или комментарий"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary btn-xl text-uppercase" type="submit">Отправить заявку</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}

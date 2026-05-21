@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Каталог{% endblock title %}
+
+{% block content %}
+
+<!-- Каталог -->
+<section class="page-section bg-light" id="portfolio">
+            <div class="container">
+                <div class="row align-items-center mb-4">
+                    <div class="col">
+                        <h2 style="margin-top: 10px">Каталог</h2>
+                        <div>
+                            <a href="{% url 'cart' %}" class="btn btn-primary"><i class="fas fa-shopping-cart me-1"></i> Корзина</a>
+                        </div>
+                    </div>
+
+                    <!-- Десктопная кнопка (показывается на планшетах и выше) -->
+                    <div class="col-auto d-none d-md-block">
+                        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                            🔍 Найти товар
+                        </button>
+                    </div>
+
+                    <!-- Мобильная иконка (показывается только на телефонах) -->
+                    <div class="col-auto d-md-none">
+                        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                            🔍
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Скрытая панель фильтров -->
+                <div class="collapse mb-4" id="filterCollapse">
+                    <div class="card card-body">
+                        <form method="get">
+                            <div class="row">
+                                <!-- Категории -->
+                                <div class="col-md-4">
+                                    <h5>Категории</h5>
+                                    <ul class="list-unstyled">
+                                        {% for cat in categories %}
+                                            <li>
+                                                <a href="#" onclick="setCategory('{{ cat.slug }}'); return false;">
+                                                    {{ cat.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <!-- Скрытое поле для категории -->
+                                    <input type="hidden" name="slug" id="slugInput" value="{{ selected_category.slug|default:'' }}">
+                                </div>
+                                
+                                <!-- Цена -->
+                                <div class="col-md-4">
+                                    <h5>Цена</h5>
+                                    <input type="text" name="min_price" placeholder="от" value="{{ request.GET.min_price }}">
+                                    <input type="text" name="max_price" placeholder="до" value="{{ request.GET.max_price }}">
+                                </div>
+                                
+                                <!-- Диаметр -->
+                                <div class="col-md-4">
+                                    <h5>Диаметр (мм)</h5>
+                                    <input type="text" name="min_diameter" placeholder="от" value="{{ request.GET.min_diameter }}">
+                                    <input type="text" name="max_diameter" placeholder="до" value="{{ request.GET.max_diameter }}">
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary mt-3" type="submit">Применить фильтры</button>
+                            <a href="{% url 'catalog' %}" class="btn btn-secondary mt-3">Сбросить все</a>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    {% comment %} <div class="col-lg-3">
+                        <h4>Категории</h4>
+                        <ul class="list-unstyled">
+                            {% for cat in categories %}
+                            <li><a href="?slug={{cat.slug}}">{{cat.name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <!-- Сброс фильтра -->
+                        <a href="{% url 'catalog' %}" class="btn btn-sm btn-outline-secondary mt-3">Сбросить фильтр</a>
+                    </div>  {% endcomment %}
+                    
+
+                    {% for product in products %}
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#productModal{{product.id}}">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                {% if product.image %}
+                                <img src="{{product.image.url}}" alt="..." />
+                                {% endif %}
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">{{ product.name}}</div>
+                                <div class="portfolio-caption-subheading text-muted">{{product.category.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}                    
+                </div>
+            </div>
+</section>
+
+<!-- Модальное окно -->
+{% for product in products %}
+<div class="portfolio-modal modal fade" id="productModal{{product.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-bs-dismiss="modal"><img src={% static "assets/img/close-icon.svg" %} alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project details--> 
+                                    <h2 class="text-uppercase">{{ product.name }}</h2>
+                                    <p class="item-intro text-muted">{{ product.category.name }}</p>
+                                    {% if product.image %}
+                                    <img class="img-fluid d-block mx-auto" src={{ product.image.url }} alt="..." />
+                                    {% endif %}
+                                    {% if product.description %}
+                                    <p>{{ product.description }}</p>
+                                    {% endif %}
+                                    <ul class="list-inline">
+                                        <li>
+                                            <strong>Цена: {{ product.price }} р.</strong>
+                                        </li>
+                                        <li>
+                                            <strong>Диаметр: {{ product.diameter }} м</strong>
+                                        </li>
+                                        <li>
+                                            <strong>Разрывная нагрузка: {{ product.breaking_load }} кгс</strong>
+                                        </li>
+                                        <li>
+                                            <strong>Вид упаковки: {{ product.packaging_type }}</strong>
+                                        </li>
+                                        <li>
+                                            <strong>Кол-во в упаковке: {{ product.length_in_pack }}</strong>
+                                        </li>
+                                        <li>
+                                            <strong>Артикул: {% if product.article %}{{product.article}}{% endif %}</strong>
+                                        </li>
+                                        <li>
+                                            <strong>Категория: {{product.category.name}}</strong>
+                                        </li>
+                                        <li>{% if product.in_stock %}Есть в наличии ✅{% else %}Нет в наличии ❌{% endif %}</li>
+                                    </ul>
+                                    
+
+                                    <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+                                        <button class="btn-dark btn btn-primary btn-xl text-uppercase flex-fill" data-bs-dismiss="modal" type="button">
+                                            <i class="fas fa-xmark me-1"></i>
+                                            Закрыть
+                                        </button>
+                                        
+                                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-xl text-uppercase flex-fill">
+                                            <i class="fas fa-shopping-cart me-1"></i>
+                                            В корзину
+                                        </a>
+                                    </div>
+
+
+                                    {% comment %} <button class="btn btn-primary btn-xl text-uppercase " data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-xmark me-1"></i>
+                                        Закрыть
+                                    </button>
+                                    
+                                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-xl text-uppercase"><i class="fas fa-shopping-cart me-1"></i>В корзину</a> {% endcomment %}
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+{% endfor %}
+
+<script>
+    function setCategory(slug) {
+        document.getElementById('slugInput').value = slug;
+        // Автоматически отправляем форму
+        document.querySelector('#filterCollapse form').submit();
+    }
+</script>
+
+{% endblock content %}
