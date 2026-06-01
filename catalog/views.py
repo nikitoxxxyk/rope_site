@@ -139,8 +139,8 @@ def send_order_email(order):
 	send_mail(
         subject=f'Новый заказ #{order.id}',
         message=plain_message,
-        from_email='lentamarket92@gmail.com',
-        recipient_list=['lentamarket92@gmail.com'],
+        from_email='info@kapron.by',
+        recipient_list=['info@kapron.by'],
 		# recipient_list=['rodstvennik@yandex.ru', order.email] - дублировать клиенту
 		html_message=html_message,
 		fail_silently=False,
@@ -195,8 +195,8 @@ def contact_view(request):
 			send_mail(
 				subject=subject,
 				message=body,
-				from_email='lentamarket92@gmail.com',
-				recipient_list=['lentamarket92@gmail.com'],
+				from_email='info@kapron.by',
+				recipient_list=['info@kapron.by'],
 				fail_silently=False,
 				)
 			return render(request, 'contact_success.html')
@@ -229,8 +229,8 @@ def call_request(request):
 			send_mail(
 				subject=subject,
 				message=body,
-				from_email='lentamarket92@gmail.com',
-				recipient_list=['lentamarket92@gmail.com'],
+				from_email='info@kapron.by',
+				recipient_list=['info@kapron.by'],
 				fail_silently=False,
 			)
 			return render(request, 'call_success.html')

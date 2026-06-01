@@ -26,8 +26,16 @@ SECRET_KEY = 'django-insecure-pe!3b0%yf4)evia==*ogaqroa^e&5)!_0w76)s+8i8=&h$*4qc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nikitoxxxyk.pythonanywhere.com']
+CSRF_TRUSTED_ORIGINS = [
+    "https://kapron.by",
+    "https://www.kapron.by",
+    "http://kapron.by",
+]
 
+CSRF_COOKIE_SECURE = False
+SECCION_COOKIE_SECURE = False
+
+ALLOWED_HOSTS = ['kapron.by', 'www.kapron.by']
 
 # Application definition
 
@@ -121,7 +129,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = '/var/www/h209228/data/www/kapron.by/static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
@@ -141,15 +151,13 @@ UNFOLD = {
 
 # Email settings
 
-# Для гугл почты
+# Для info@kapron.by почты
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.hoster.by'
+EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'lentamarket92@gmail.com'
-EMAIL_HOST_PASSWORD = 'zvwl fedm fjln hbni' # Для lentamarket92@gmail.com пароль приложения
-
-# EMAIL_HOST_PASSWORD = 'kzpz pxar xkjl ewuj' Для kuprysnikita2@gmail.com пароль приложения
+EMAIL_HOST_USER = 'info@kapron.by'
+EMAIL_HOST_PASSWORD = 'JLyZiq[t%S85' # Для lentamarket92@gmail.com пароль приложения
 
 # Для Яндекс почты
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
