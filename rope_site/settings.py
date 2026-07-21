@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os 
+import pymysql
+pymysql.install_as_MySQLdb()
+
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pe!3b0%yf4)evia==*ogaqroa^e&5)!_0w76)s+8i8=&h$*4qc'
+SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-pe!3b0%yf4)evia==*ogaqroa^e&5)!_0w76)s+8i8=&h$*4qc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 CSRF_TRUSTED_ORIGINS = [
     "https://kapron.by",
@@ -53,6 +58,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,16 +92,21 @@ WSGI_APPLICATION = 'rope_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('DB_NAME'),     # То, что сохранили на шаге 1
+        'USER': config('DB_USER'),    # То, что сохранили на шаге 1
+        'PASSWORD': config('DB_PASSWORD'),      # То, что сохранили на шаге 1
+        'HOST': 'localhost',           # Хост из шага 1, скорее всего 'localhost'
+        'PORT': '3306',                # Стандартный порт MySQL
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',      # Обязательно для поддержки русского
+        }
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -112,10 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -124,17 +131,15 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATICFILES_DIRS = [BASE_DIR / "static"]
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Папка для картинок
+STATIC_ROOT = BASE_DIR / 'staticfiles'    # Сюда всё соберется
 
-STATIC_ROOT = '/var/www/h209228/data/www/kapron.by/static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = "/www/kapron.by/var/www/h209228/rope_site/media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -149,21 +154,12 @@ UNFOLD = {
 	'THEME': 'dark',
 }
 
-# Email settings
-
-# Для info@kapron.by почты
+# Для почты
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.hoster.by'
 EMAIL_PORT = 465
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'info@kapron.by'
-EMAIL_HOST_PASSWORD = 'JLyZiq[t%S85' # Для lentamarket92@gmail.com пароль приложения
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
-# Для Яндекс почты
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.yandex.ru'  # для Yandex
-# EMAIL_PORT = 465
-# EMAIL_USE_SSL = True
-# EMAIL_HOST_USER = 'nicitakuprys@yandex.ru' # Та почта, с которой будет отправлять письмо на рабочую почту родственника
-# EMAIL_HOST_PASSWORD = 'mqoawahkpbpgnjsg' # Пароль приложения который получается на почте
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
