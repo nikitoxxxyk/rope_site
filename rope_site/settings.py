@@ -14,6 +14,7 @@ from pathlib import Path
 import os 
 import pymysql
 pymysql.install_as_MySQLdb()
+import sys
 
 from decouple import config
 
@@ -40,7 +41,7 @@ CSRF_TRUSTED_ORIGINS = [
 CSRF_COOKIE_SECURE = False
 SECCION_COOKIE_SECURE = False
 
-ALLOWED_HOSTS = ['kapron.by', 'www.kapron.by']
+ALLOWED_HOSTS = ['kapron.by', 'www.kapron.by', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -93,20 +94,35 @@ WSGI_APPLICATION = 'rope_site.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME'),     # То, что сохранили на шаге 1
-        'USER': config('DB_USER'),    # То, что сохранили на шаге 1
-        'PASSWORD': config('DB_PASSWORD'),      # То, что сохранили на шаге 1
-        'HOST': 'localhost',           # Хост из шага 1, скорее всего 'localhost'
-        'PORT': '3306',                # Стандартный порт MySQL
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',      # Обязательно для поддержки русского
+if 'runserver' in sys.argv: # Для локального запуска
+    DEBUG = True
+    ALLOWED_HOSTS = ['*']
+    CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_HTTPONLY = False 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-}
+
+else: # Для продакшена MySQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('DB_NAME'),  
+            'USER': config('DB_USER'),   
+            'PASSWORD': config('DB_PASSWORD'),     
+            'HOST': config('DB_HOST', default='localhost'),           
+            'PORT': '3306',                
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'charset': 'utf8mb4',  
+            }
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
