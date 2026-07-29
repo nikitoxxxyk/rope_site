@@ -1,19 +1,6 @@
 version: '3.8'
 
 services:
-  # db:
-  #   image: mysql:8.0
-  #   restart: always
-  #   environment:
-  #     MYSQL_DATABASE: kaprondb
-  #     MYSQL_USER: kapron_user
-  #     MYSQL_PASSWORD: D4I-fSW-Lpr-j3y
-  #     MYSQL_ROOT_PASSWORD: D4I-fSW-Lpr-j3y
-  #   ports:
-  #     - "3306:3306"
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-  #   command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
   web:
     build: .
@@ -26,6 +13,6 @@ services:
       - .:/app
       - ./media:/app/media
       - ./staticfiles:/app/staticfiles
-
+      
 # volumes:
 #   mysql_data:
