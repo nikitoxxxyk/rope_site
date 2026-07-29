@@ -20,4 +20,11 @@
 - **Дополнительно:** Whitenoise, PyMySQL, python-decouple
 - **Контейнеризация:** Docker, Docker Compose
 
-## 🐳 Запуск с Docker (локальная разработка)
+## 🐳 Запуск с Docker
+
+### 1. Клонируйте репозиторий
+
+```bash
+git clone https://github.com/nikitoxxxyk/rope_site.git
+cd rope_site
+
