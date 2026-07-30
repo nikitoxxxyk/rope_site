@@ -172,7 +172,7 @@ UNFOLD = {
 
 # Для почты
 if 'runserver' in sys.argv or 'docker' in sys.argv:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBacken' # Если проект запущен локально
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Если проект запущен локально
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'smtp.hoster.by'

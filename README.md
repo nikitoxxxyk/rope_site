@@ -22,9 +22,31 @@
 
 ## 🐳 Запуск с Docker
 
-### 1. Клонируйте репозиторий
-
 ```bash
+# 1. Клонируйте репозиторий и перейдите папку с проектом с помощью команд:
 git clone https://github.com/nikitoxxxyk/rope_site.git
 cd rope_site
 
+# 2. Скопируйте файл-шаблон
+cp .env.example .env
+
+# 3. Сгенерируйте SECRET_KEY и вставьте в свой .env
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+
+# 4. Соберите контейнеры
+docker-compose up --build
+```
+
+Сайт будет доступен по адресу: http://localhost:8000
+
+## 📧 Почта в локальной разработке
+
+При локальном запуске письма **не отправляются по-настоящему**, а выводятся в консоль (`django.core.mail.backends.console.EmailBackend`).
+
+Чтобы увидеть содержимое письма (заказ, заявку), смотрите логи контейнера:
+
+```bash
+docker-compose logs -f web
+```
+
+В продакшене был использован smtp протокол: django.core.mail.backends.smtp.EmailBackend, с помощью которого все post-запросы (заказ звонка, вопрос, оформление заявки на заказ) присылаются на почту хостинга, которые видит оператор.
