@@ -20,7 +20,7 @@
 - **Дополнительно:** Whitenoise, PyMySQL, python-decouple
 - **Контейнеризация:** Docker, Docker Compose
 
-*Пожалуйста перейдите на ветку docker-experiment, чтобы запустить проект через docker*
+**Пожалуйста перейдите на ветку docker-experiment, чтобы запустить проект через docker**
 
 ## 🐳 Запуск с Docker
 
