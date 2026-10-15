@@ -9,7 +9,7 @@
  * Copyright 2011-2022 The Bootstrap Authors
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
+ */ 
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -79,7 +79,6 @@
   --bs-highlight-bg: #fff4cc;
 }
 
-/* Добавил из deepseek */
 * {
     max-width: 100%;
     box-sizing: border-box;
@@ -130,7 +129,6 @@ img {
     max-width: 100%;
     overflow-x: hidden;
 }
-
 /* Исправление для навбара на мобилках */
 @media (max-width: 991.98px) {
     .navbar-collapse {
@@ -225,8 +223,8 @@ img {
     
     /* Исправление для шапки */
     .masthead {
-        padding: 100px 0;
-        min-height: auto;
+      padding: 100px 0;
+      min-height: auto;
     }
     
     .masthead-heading {
@@ -6100,7 +6098,7 @@ textarea.form-control-lg {
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11091,7 +11089,7 @@ p {
   }
 }
 .btn-xl {
-  padding: 1.25rem 2.5rem;
+  padding: 1rem 2.5rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1.125rem;
   font-weight: 700;
@@ -11193,11 +11191,11 @@ p {
 }
 
 header.masthead {
-  padding-top: 10.5rem;
-  padding-bottom: 6rem;
+  padding: 0 !important;
+  margin: 0 !important;
   text-align: center;
   color: #fff;
-  background-image: url("../assets/img/bg-img.jpg");
+  /* background-image: url("../assets/img/bg-img.jpg"); */
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
@@ -11233,7 +11231,7 @@ header.masthead .masthead-heading {
     font-size: 4.5rem;
     font-weight: 700;
     line-height: 4.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
   }
 }
 #portfolio .portfolio-item {
@@ -11573,3 +11571,54 @@ section#contact form#contactForm :-ms-input-placeholder {
   font-size: 0.9rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* Карусель */
+
+#heroCarousel,
+#heroCarousel .carousel-inner,
+#heroCarousel .carousel-item {
+    height: 100%;
+}
+
+.masthead {
+    margin-top: 150px;
+    position: relative;    /* ← обязательно! */
+    height: 95vh;          /* ← ограничиваем высоту слайдера */
+    overflow: hidden;      /* ← обрезаем всё, что выходит за пределы */
+    padding: 0;
+    margin: 0;
+}
+
+.hero-media {
+      width: 100%; 
+      height: 100%;
+      object-fit: cover;     /* обрезает, сохраняя пропорции */
+      object-position: center;
+      display: block;
+  }
+
+  /* Тёмный оверлей поверх слайдов */
+  .masthead::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);   /* затемнение, чтобы текст читался */
+    z-index: 1;
+  }
+
+  /* Текст поверх слайдов */
+  .masthead-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;             /* выше оверлея и карусели */
+    text-align: center;
+    color: #fff;
+    padding-top: 80px;
+  }
+
+/* Плавное переключение */
+  .carousel-fade .carousel-item {
+    transition: opacity 1s ease-in-out;
+  }

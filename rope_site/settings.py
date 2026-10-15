@@ -26,10 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-# SECRET_KEY = 'django-insecure-pe!3b0%yf4)evia==*ogaqroa^e&5)!_0w76)s+8i8=&h$*4qc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 CSRF_TRUSTED_ORIGINS = [
     "https://kapron.by",
@@ -40,12 +39,13 @@ CSRF_TRUSTED_ORIGINS = [
 CSRF_COOKIE_SECURE = False
 SECCION_COOKIE_SECURE = False
 
-ALLOWED_HOSTS = ['kapron.by', 'www.kapron.by']
-
 # Application definition
 
 INSTALLED_APPS = [
 	'unfold',
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.inlines",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -93,21 +93,6 @@ WSGI_APPLICATION = 'rope_site.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME'),     # То, что сохранили на шаге 1
-        'USER': config('DB_USER'),    # То, что сохранили на шаге 1
-        'PASSWORD': config('DB_PASSWORD'),      # То, что сохранили на шаге 1
-        'HOST': 'localhost',           # Хост из шага 1, скорее всего 'localhost'
-        'PORT': '3306',                # Стандартный порт MySQL
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',      # Обязательно для поддержки русского
-        }
-    }
-}
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -123,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -151,15 +136,49 @@ UNFOLD = {
 	'SITE_TITLE': "Kapron",
 	'SITE_HEADER': "Админ-панель",
 	'SITE_ICON': "/static/assets/img/logo_cut.png",
-	'THEME': 'dark',
+	'THEME': 'light',
+    "COLORS": {
+        "primary": {
+            "50": "#f0fdf4",
+            "100": "#dcfce7",
+            # ... другие оттенки ...
+        },
+    },
 }
 
 # Для почты
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.hoster.by'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+import sys 
+if DEBUG:
+    DATABASES = {
+		'default': {
+			'ENGINE': 'django.db.backends.sqlite3',
+			'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else: 
+    ALLOWED_HOSTS = ['kapron.by', 'www.kapron.by']
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('DB_NAME'), 
+        'USER': config('DB_USER'),    
+        'PASSWORD': config('DB_PASSWORD'),      
+        'HOST': 'localhost',         
+        'PORT': '3306',         
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4', 
+            }
+        }
+    }
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

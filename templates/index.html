@@ -22,7 +22,7 @@
                             <li class="nav-item" style="margin-right: 13px;"><a href="{% url 'cart' %}" class="nav-link"><i class="fas fa-shopping-cart me-1"></i></a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url "payment_delivery" %}">Оплата и доставка</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url "catalog" %}">Каталог</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#about">О нас</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/media/documents/price-list.pdf" download>Прайс-лист</a></li>
                             <li class="nav-item"><a class="nav-link" href="#contact">Контакты</a></li>
                         </ul>
                     </div>
@@ -32,14 +32,74 @@
 
 {% block content %}
     <body id="page-top">
-        <!-- Навигация -->
         <header class="masthead">
+            <!-- Карусель -->
+            <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+                <!-- Индикаторы (точки внизу) -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4"></button>
+                </div>
+
+                <!-- Слайды -->
+                <div class="carousel-inner">
+
+                    <!-- Слайд 1: видео -->
+                    <div class="carousel-item">
+                        <video class="d-block w-10 hero-media" autoplay muted loop playsinline>
+                            <source src="{% static 'assets/slides/video_1.mp4' %}" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <!-- Слайд 2: видео -->
+                    <div class="carousel-item active">
+                        <video class="d-block w-100 hero-media" autoplay muted loop playsinline>
+                            <source src="{% static 'assets/slides/video_2.mp4' %}" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <!-- Слайд 3: фото -->
+                    <div class="carousel-item">
+                        <img src="{% static 'assets/slides/slide_1.jpg' %}" class="d-block w-100 hero-media" alt="...">
+                    </div>
+
+                    <!-- Слайд 4: фото -->
+                    <div class="carousel-item">
+                        <img src="{% static 'assets/slides/slide_2.jpg' %}" class="d-block w-100 hero-media" alt="...">
+                    </div>
+
+                    <!-- Слайд 5: фото -->
+                    <div class="carousel-item">
+                        <img src="{% static 'assets/slides/slide_3.jpg' %}" class="d-block w-100 hero-media" alt="...">
+                    </div>
+                </div>
+
+                <!-- Стрелки навигации -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+
+            <!-- Текст поверх слайдов -->
+            <div class="masthead-content container">
+                {% comment %}   {% endcomment %}
+                <div class="masthead-heading text-uppercase">Добро пожаловать в KAPRON!</div>
+                <a class="btn btn-primary btn-xl text-uppercase" href="#services">Узнать больше</a>
+            </div>
+        </header>
+        {% comment %} <header class="masthead">
             <div class="container">
                 <div class="masthead-subheading">Добрый день</div>
                 <div class="masthead-heading text-uppercase">Добро пожаловать в KAPRON!</div>
                 <a class="btn btn-primary btn-xl text-uppercase" href="#services">Узнать больше</a>
             </div>
-        </header>
+        </header> {% endcomment %}
         <!-- Преимущества -->
         <section class="page-section" id="services">
             <div class="container">
