@@ -20,7 +20,9 @@
 					<div class="portfolio-item">
 						<div class="portfolio-caption">
 							<div class="portfolio-caption-heading">{{ item.product.name }}</div>
-							<img src="{{ item.product.image.url }}" width="50">
+							{% if item.image %}
+							<img src="{{ item.image }}" width="50">
+							{% endif %}
 							<div class="portfolio-caption-subheading text-muted">Цена: {{ item.product.price }}</div>
 							<div class="portfolio-caption-subheading text-muted">Количество: {{ item.quantity }}</div>
 							<div class="portfolio-caption-subheading text-muted">Итоговая стоимость: {{ item.total_price }} руб.</div>

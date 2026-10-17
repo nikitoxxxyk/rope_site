@@ -7,7 +7,7 @@ admin.site.register(OrderItem)
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):
-	list_display = ['name', 'category', 'quantity', 'price', 'diameter', 'breaking_load_display', 'breaking_load_kg', 'packaging_type', 'length_in_pack']
+	list_display = ['name', 'category', 'quantity', 'price', 'diameter', 'breaking_load', 'packaging_type', 'length_in_pack']
 	search_fields = ['name']
 	prepopulated_fields = {
 		'slug': ('name',)

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="container">
+        <!-- Хлебные крошки -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'catalog' %}">Каталог</a></li>
+                <li class="breadcrumb-item active">{{ category.name }}</li>
+            </ol>
+        </nav>
+
+        <h2 class="section-heading text-uppercase text-center mb-4">{{ category.name }}</h2>
+
+        {% if products %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Наименование</th>
+                        {% if has_diameter %}<th>Диаметр (мм)</th>{% endif %}
+                        {% if has_breaking_load %}<th>Разрывная нагрузка (кгс)</th>{% endif %}
+                        {% if has_length %}<th>Длина</th>{% endif %}
+                        {% if has_weight %}<th>Вес</th>{% endif %}
+                        {% if has_color %}<th>Цвет</th>{% endif %}
+                        {% if has_packaging %}<th>Упаковка</th>{% endif %}
+                        {% if has_quantity_in_pack %}<th>Кол-во в упаковке</th>{% endif %}
+                        <th>Цена</th>
+                        <th>Наличие</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <strong>{{ product.name }}</strong>
+                            {% if product.is_new %}<span class="badge bg-danger ms-1">Новинка</span>{% endif %}
+                        </td>
+                        {% if has_diameter %}<td>{{ product.diameter|default:"—" }}</td>{% endif %}
+                        {% if has_breaking_load %}<td>{{ product.breaking_load|default:"—" }}</td>{% endif %}
+                        {% if has_length %}<td>{{ product.length|default:"—" }}</td>{% endif %}
+                        {% if has_weight %}<td>{{ product.weight|default:"—" }}</td>{% endif %}
+                        {% if has_color %}<td>{{ product.color|default:"—" }}</td>{% endif %}
+                        {% if has_packaging %}<td>{{ product.packaging|default:"—" }}</td>{% endif %}
+                        {% if has_quantity_in_pack %}<td>{{ product.quantity_in_pack|default:"—" }}</td>{% endif %}
+                        <td><strong>{{ product.price }} {{ product.get_price_unit_display }}</strong></td>
+                        <td>
+                            {% if product.in_stock %}
+                                <span class="text-success">В наличии</span>
+                            {% else %}
+                                <span class="text-muted">Под заказ</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="post" action="{% url 'add_to_cart' product.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-sm">В корзину</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">В этой категории пока нет товаров.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -15,55 +15,77 @@ def home_view(request):
 	return render(request, 'index.html', context)
 
 def catalog_view(request):
-	products = Product.objects.all()
 	categories = Category.objects.all()
+	context = {
+		'categories': categories,
+	}
+	return render(request, 'catalog.html', context)
 
 	# Фильтрация по категории
-	category_slug = None
-	if request.method == 'GET':
-		category_slug = request.GET.get('slug')
+	# category_slug = None
+	# if request.method == 'GET':
+	# 	category_slug = request.GET.get('slug')
 
-	selected_category = None
-	if category_slug:
-		try:
-			selected_category = categories.get(slug=category_slug)
-			products = products.filter(category=selected_category)
-		except Category.DoesNotExist:
-			selected_category = None
+	# selected_category = None
+	# if category_slug:
+	# 	try:
+	# 		selected_category = categories.get(slug=category_slug)
+	# 		products = products.filter(category=selected_category)
+	# 	except Category.DoesNotExist:
+	# 		selected_category = None
 
-	# Фильтрация по цене
-	min_price = request.GET.get('min_price')
-	max_price = request.GET.get('max_price')
+	# # Фильтрация по цене
+	# min_price = request.GET.get('min_price')
+	# max_price = request.GET.get('max_price')
 
-	if min_price:
-		products = products.filter(price__gte=float(min_price))
-	if max_price:
-		products = products.filter(price__lte=float(max_price))
+	# if min_price:
+	# 	products = products.filter(price__gte=float(min_price))
+	# if max_price:
+	# 	products = products.filter(price__lte=float(max_price))
 
-	# Фильтрация по диаметру
-	min_diam = request.GET.get('min_diameter')
-	max_diam = request.GET.get('max_diameter')
+	# # Фильтрация по диаметру
+	# min_diam = request.GET.get('min_diameter')
+	# max_diam = request.GET.get('max_diameter')
 
-	if min_diam:
-		try:
-			products = products.filter(diameter__gte=float(min_diam))
-		except ValueError:
-			pass
-	if max_diam:
-		products = products.filter(diameter__lte=max_diam)
+	# if min_diam:
+	# 	try:
+	# 		products = products.filter(diameter__gte=float(min_diam))
+	# 	except ValueError:
+	# 		pass
+	# if max_diam:
+	# 	products = products.filter(diameter__lte=max_diam)
+
+	# context = {
+	# 	'products': products,
+	# 	'categories': categories,
+	# 	'selected_category': selected_category
+	# }
+
+	# return render(request, 'catalog.html', context)
+
+def category_detail(request, category_slug):
+	category = get_object_or_404(Category, slug=category_slug)
+	products = Product.objects.filter(category=category)
 
 	context = {
+		'category': category,
 		'products': products,
-		'categories': categories,
-		'selected_category': selected_category
+		'has_diameter': products.exclude(diameter__isnull=True).exists(),
+        'has_breaking_load': products.exclude(breaking_load__isnull=True).exists(),
+        'has_length': products.exclude(length='').exists(),
+        'has_weight': products.exclude(weight='').exists(),
+        'has_color': products.exclude(color='').exists(),
+        'has_packaging': products.exclude(packaging='').exists(),
+        'has_quantity_in_pack': products.exclude(quantity_in_pack='').exists(),
 	}
-
-	return render(request, 'catalog.html', context)
+	return render(request, 'category.html', context)
 
 def add_to_cart(request, product_id):
 	product = get_object_or_404(Product, id=product_id) # получаем товар по id либо ошибку 404, если его нет
 
 	cart = request.session.get('cart', {}) # получаем корзину из сессии, если ее еще нет то создаем новую
+
+	category = product.category
 
 	product_key = str(product_id)
 	if product_key in cart:
@@ -73,7 +95,7 @@ def add_to_cart(request, product_id):
 			'name': product.name,
 			'price': str(product.price),
 			'quantity': 1,  # ПОКА НЕПОНЯТНО КАК БУДЕМ РЕАЛИЗОВЫВАТЬ КОЛИЧЕСТВО ТОВАРОВ
-			'image': product.image.url if product.image else '',
+			'image': category.image.url if category.image else '',
 		}
 
 	request.session['cart'] = cart

@@ -16,7 +16,7 @@
                         </div>
                     </div>
 
-                    <!-- Десктопная кнопка (показывается на планшетах и выше) -->
+                    {% comment %} <!-- Десктопная кнопка (показывается на планшетах и выше) -->
                     <div class="col-auto d-none d-md-block">
                         <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
                             🔍 Найти товар
@@ -40,10 +40,10 @@
                                 <div class="col-md-4">
                                     <h5>Категории</h5>
                                     <ul class="list-unstyled">
-                                        {% for cat in categories %}
+                                        {% for category in categories %}
                                             <li>
-                                                <a href="#" onclick="setCategory('{{ cat.slug }}'); return false;">
-                                                    {{ cat.name }}
+                                                <a href="#" onclick="setCategory('{{ category.slug }}'); return false;">
+                                                    {{ category.name }}
                                                 </a>
                                             </li>
                                         {% endfor %}
@@ -71,45 +71,43 @@
                             <a href="{% url 'catalog' %}" class="btn btn-secondary mt-3">Сбросить все</a>
                         </form>
                     </div>
-                </div>
+                </div> {% endcomment %}
 
 
                 <div class="row">
-                    {% comment %} <div class="col-lg-3">
-                        <h4>Категории</h4>
-                        <ul class="list-unstyled">
-                            {% for cat in categories %}
-                            <li><a href="?slug={{cat.slug}}">{{cat.name}}</a></li>
-                            {% endfor %}
-                        </ul>
-                        <!-- Сброс фильтра -->
-                        <a href="{% url 'catalog' %}" class="btn btn-sm btn-outline-secondary mt-3">Сбросить фильтр</a>
-                    </div>  {% endcomment %}
-                    
-
-                    {% for product in products %}
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <div class="portfolio-item">
-                            <a class="portfolio-link" data-bs-toggle="modal" href="#productModal{{product.id}}">
-                                <div class="portfolio-hover">
-                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                    {% for category in categories %}
+                        <div class="col-lg-4 col-sm-6 mb-4">
+                            <div class="portfolio-item">
+                                <a class="portfolio-link" href="{% url 'category_detail' category.slug %}">
+                                    <div class="portfolio-hover">
+                                        <div class="portfolio-hover-content">
+                                            <i class="fas fa-plus fa-3x"></i>
+                                        </div>
+                                    </div>
+                                    {% if category.image %}
+                                        <img src="{{ category.image.url }}" alt="{{ category.name }}" />
+                                    {% else %}
+                                        <img src="{% static 'assets/img/placeholder.jpg' %}" alt="{{ category.name }}" />
+                                    {% endif %}
+                                </a>
+                                <div class="portfolio-caption">
+                                    <div class="portfolio-caption-heading">{{ category.name }}</div>
+                                    <div class="portfolio-caption-subheading text-muted">
+                                        {{ category.products.count }} товаров
+                                    </div>
                                 </div>
-                                {% if product.image %}
-                                <img src="{{product.image.url}}" alt="..." />
-                                {% endif %}
-                            </a>
-                            <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading">{{ product.name}}</div>
-                                <div class="portfolio-caption-subheading text-muted">{{product.category.name}}</div>
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}                    
+                        {% empty %}
+                        <div class="col-12 text-center">
+                            <p>Категории пока не добавлены.</p>
+                        </div>
+                    {% endfor %}                   
                 </div>
             </div>
 </section>
 
-<!-- Модальное окно -->
+{% comment %} <!-- Модальное окно -->
 {% for product in products %}
 <div class="portfolio-modal modal fade" id="productModal{{product.id}}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
@@ -166,13 +164,6 @@
                                         </a>
                                     </div>
 
-
-                                    {% comment %} <button class="btn btn-primary btn-xl text-uppercase " data-bs-dismiss="modal" type="button">
-                                        <i class="fas fa-xmark me-1"></i>
-                                        Закрыть
-                                    </button>
-                                    
-                                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-xl text-uppercase"><i class="fas fa-shopping-cart me-1"></i>В корзину</a> {% endcomment %}
                                     
                                 </div>
                             </div>
@@ -183,7 +174,7 @@
         </div>
 
         
-{% endfor %}
+{% endfor %} {% endcomment %}
 
 <script>
     function setCategory(slug) {

@@ -2,25 +2,40 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 class Product(models.Model):
-	name = models.CharField(max_length=250, verbose_name='Товар')
+	# Обязательны
+	name = models.CharField(max_length=250, verbose_name='Наименование')
 	category = models.ForeignKey('Category', verbose_name='Категория', related_name='products', on_delete=models.CASCADE)
-	quantity = models.CharField(verbose_name='Количество (м)', max_length=300, blank=True, null=True)
 	slug = models.SlugField(max_length=300, verbose_name='URL', blank=True)
-	article = models.CharField(max_length=100, verbose_name='Артикул', blank=True)
-	image = models.ImageField(upload_to='products/', verbose_name='Изображение', blank=True, null=True)
-	price = models.DecimalField(verbose_name='Цена в рублях', max_digits=10, decimal_places=2, default=0)
+	price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
+
+	# Не у всех товаров есть
+	quantity = models.CharField(verbose_name='Количество (м)', max_length=300, blank=True, null=True)
 	description = models.TextField(verbose_name='Описание', blank=True)
 	created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')
 	in_stock = models.BooleanField(verbose_name='В наличии', default=True)
+	meters_in_pack = models.PositiveIntegerField(null=True, blank=True, verbose_name="Длина (м)", )
+	color = models.CharField(verbose_name="Цвет", blank=True, max_length=100)
+	packaging = models.CharField(max_length=100, blank=True, verbose_name="Упаковка")
+	quantity_in_pack = models.CharField(max_length=100, blank=True, verbose_name="Упаковка")
+	breaking_load = models.FloatField(null=True, blank=True, verbose_name='Разрывная нагрузка (кгс)')
+	length = models.CharField(max_length=100, blank=True, verbose_name="Длина")
+	weight = models.CharField(max_length=100, blank=True, verbose_name="Вес")
+	price_unit = models.CharField(
+		max_length=20,
+		choices=[
+			('м', 'руб./метр'),
+            ('кг', 'руб./кг'),
+            ('шт', 'руб./шт.'),
+		],
+		default='м',
+		verbose_name='Единица цены'
+	)
 
-	# Для отображения
+	is_new = models.BooleanField(default=True, verbose_name='Новая позиция')
+	is_featured = models.BooleanField(default=True, verbose_name="Популярное")
 	diameter = models.FloatField(null=True, blank=True, verbose_name='Диаметр (мм)', help_text='При написании чисел с плавающей запятой используйте точку (.)')
-	breaking_load_display = models.CharField(max_length=50, blank=True, null=True, verbose_name='Разрывная нагрузка')
 	packaging_type = models.CharField(max_length=100, blank=True, null=True, verbose_name='Вид упаковки')
 	length_in_pack = models.CharField(max_length=100, blank=True, null=True, verbose_name='Кол-во в упаковке (м)')
-
-	# Для фильтрации
-	breaking_load_kg = models.FloatField(null=True, blank=True, verbose_name='Разрывная Нагрузка (кгс)')
 
 	class Meta:
 		verbose_name = 'Товар'
@@ -37,6 +52,7 @@ class Product(models.Model):
 class Category(models.Model):
 	name = models.CharField(max_length=250, verbose_name='Категория', unique=True)
 	slug = models.SlugField(max_length=300, unique=True, verbose_name='URL', blank=True)
+	image = models.ImageField(upload_to='products/', verbose_name='Изображение', blank=True, null=True)
 
 	class Meta:
 		verbose_name = 'Категория'
