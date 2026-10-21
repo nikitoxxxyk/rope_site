@@ -7,9 +7,9 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 
 def home_view(request):
-	products = Product.objects.order_by('created_at')[:6]
+	categories = Category.objects.all()[:6]
 	context = {
-		'products': products
+		'categories': categories
 	}
 
 	return render(request, 'index.html', context)
@@ -66,17 +66,48 @@ def catalog_view(request):
 def category_detail(request, category_slug):
 	category = get_object_or_404(Category, slug=category_slug)
 	products = Product.objects.filter(category=category)
+	    # 3. Фильтрация по цене (внутри категории)
+	min_price = request.GET.get('min_price')
+	max_price = request.GET.get('max_price')
+
+	if min_price:
+		try:
+			products = products.filter(price__gte=float(min_price))
+		except ValueError:
+			pass
+	if max_price:
+		try:
+			products = products.filter(price__lte=float(max_price))
+		except ValueError:
+			pass
+
+	min_diam = request.GET.get('min_diameter')
+	max_diam = request.GET.get('max_diameter')
+
+	if min_diam:
+		try:
+			products = products.filter(diameter__gte=float(min_diam))
+		except ValueError:
+			pass
+	if max_diam:
+		try:
+			products = products.filter(diameter__lte=float(max_diam))
+		except ValueError:
+			pass
+
+
 
 	context = {
 		'category': category,
 		'products': products,
+
 		'has_diameter': products.exclude(diameter__isnull=True).exists(),
         'has_breaking_load': products.exclude(breaking_load__isnull=True).exists(),
-        'has_length': products.exclude(length='').exists(),
-        'has_weight': products.exclude(weight='').exists(),
-        'has_color': products.exclude(color='').exists(),
-        'has_packaging': products.exclude(packaging='').exists(),
-        'has_quantity_in_pack': products.exclude(quantity_in_pack='').exists(),
+        'has_length': products.exclude(length='').exclude(length__isnull=True).exists(),
+        'has_weight': products.exclude(weight='').exclude(weight__isnull=True).exists(),
+        'has_color': products.exclude(color='').exclude(color__isnull=True).exists(),
+        'has_packaging': products.exclude(packaging='').exclude(packaging__isnull=True).exists(),
+        'has_quantity_in_pack': products.exclude(quantity_in_pack='').exclude(quantity_in_pack__isnull=True).exists(),
 	}
 	return render(request, 'category.html', context)
 

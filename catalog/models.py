@@ -16,7 +16,7 @@ class Product(models.Model):
 	meters_in_pack = models.PositiveIntegerField(null=True, blank=True, verbose_name="Длина (м)", )
 	color = models.CharField(verbose_name="Цвет", blank=True, max_length=100)
 	packaging = models.CharField(max_length=100, blank=True, verbose_name="Упаковка")
-	quantity_in_pack = models.CharField(max_length=100, blank=True, verbose_name="Упаковка")
+	quantity_in_pack = models.CharField(max_length=100, blank=True, verbose_name='Количество в упаковке')
 	breaking_load = models.FloatField(null=True, blank=True, verbose_name='Разрывная нагрузка (кгс)')
 	length = models.CharField(max_length=100, blank=True, verbose_name="Длина")
 	weight = models.CharField(max_length=100, blank=True, verbose_name="Вес")
@@ -35,7 +35,6 @@ class Product(models.Model):
 	is_featured = models.BooleanField(default=True, verbose_name="Популярное")
 	diameter = models.FloatField(null=True, blank=True, verbose_name='Диаметр (мм)', help_text='При написании чисел с плавающей запятой используйте точку (.)')
 	packaging_type = models.CharField(max_length=100, blank=True, null=True, verbose_name='Вид упаковки')
-	length_in_pack = models.CharField(max_length=100, blank=True, null=True, verbose_name='Кол-во в упаковке (м)')
 
 	class Meta:
 		verbose_name = 'Товар'

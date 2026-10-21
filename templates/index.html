@@ -151,20 +151,20 @@
                 </div>
 
                 <div class="row">
-                    {% for product in products %}
+                    {% for category in categories %}
                     <div class="col-lg-4 col-sm-6 mb-4">
                         <div class="portfolio-item">
-                            <a class="portfolio-link" data-bs-toggle="modal" href="#productModal{{product.id}}">
+                            <a class="portfolio-link" href="{% url 'category_detail' category.slug %}">
                                 <div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                {% if product.image %}
-                                <img src="{{product.image.url}}" alt="..." />
+                                {% if category.image %}
+                                <img src="{{category.image.url}}" alt="{{category.name}}" />
                                 {% endif %}
                             </a>
                             <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading">{{product.name}}</div>
-                                <div class="portfolio-caption-subheading text-muted">{{product.category}}</div>
+                                <div class="portfolio-caption-heading">{{category.name}}</div>
+                                <div class="portfolio-caption-subheading text-muted">Товаров: {{category.products.count}}</div>
                             </div>
                         </div>
                     </div>
